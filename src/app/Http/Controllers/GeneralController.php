@@ -20,7 +20,6 @@ class GeneralController extends Controller
     }
 
     public function getRequestList(){
-
         return view('general.request_list');
     }
 
@@ -28,7 +27,7 @@ class GeneralController extends Controller
         $user = Auth::user();
         $attendance = Attendance::where('id','=', $request->id)->first();
         $breakTimes = BreakTime::where('attendance_id','=', $request->id)->orderBy('start_at', 'asc')->get();
-    return view('general.attendance_detail', compact('user', 'attendance', 'breakTimes'));
+        return view('general.attendance_detail', compact('user', 'attendance', 'breakTimes'));
     }
     
 
@@ -59,7 +58,6 @@ class GeneralController extends Controller
         $breakTime = new BreakTime();
         $breakTime->attendance_id = $request->id;
         $breakTime->start_at = Carbon::now()->format('H:i');
-        // Log::debug($breakTimeStart);
         $breakTime->save();
         return redirect('/attendance');
     }
@@ -79,13 +77,8 @@ class GeneralController extends Controller
     public function getAttendanceList(){
         $date = Carbon::now()->format('Y-m');
         $user = Auth::user();
-        // $breakTime = DB::table('attendances')->where('user_id','=', $user->id)->where('date','like', $date . '%')->orderBy('date', 'desc')->joinSub(
-        //     BreakTime::select(DB::raw('attendance_id, timediff(end_at,start_at) as total_time')),'break_times', 'attendances.id', '=', 'break_times.attendance_id')->selectRaw("DATE_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(total_time))), '%H:%i') as total_break_time")->value('total_break_time');
-
-
         $attendances = DB::table('attendances')->where('user_id','=', $user->id)->where('date','like', $date . '%')->orderBy('date', 'desc')->joinSub(
             BreakTime::select(DB::raw('attendance_id, TIMEDIFF(end_at,start_at) as break_time')),'break_times', 'attendances.id', '=', 'break_times.attendance_id')->groupBy('attendance_id')->selectRaw("id, date, clock_in_at, clock_out_at,DATE_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(break_time))), '%H:%i') as total_break_time, DATE_FORMAT(TIMEDIFF(TIMEDIFF(clock_out_at,clock_in_at),SEC_TO_TIME(SUM(TIME_TO_SEC(break_time)))), '%H:%i') as total_time")->get();
-        Log::debug($attendances);
         return view('general.attendance_list', compact('attendances'));
     }
 

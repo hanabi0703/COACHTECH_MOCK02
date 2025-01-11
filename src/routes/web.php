@@ -32,11 +32,6 @@ Route::get('/admin/login', function () { return view('admin.login');});
 // });
 
 Route::group(['middleware' => ['role:editor']], function (){
-    // Route::post('/login', [GeneralController::class, 'login']);
-    // Route::post('/register', [GeneralController::class, 'register']);
-    
-    // Route::get('/attendance', [GeneralController::class, 'getAttendanceRegister']);
-    // Route::get('/attendance', function () { return view('general.attendance_register');});
     Route::get('/attendance', [GeneralController::class, 'getAttendance']);
     Route::post('/attendance/clock_in', [GeneralController::class, 'postAttendanceClockIn']);
     Route::post('/attendance/clock_out', [GeneralController::class, 'postAttendanceClockOut']);
@@ -44,6 +39,5 @@ Route::group(['middleware' => ['role:editor']], function (){
     Route::post('/attendance/break_time_end', [GeneralController::class, 'postAttendanceBreakTimeEnd']);
     Route::get('/attendance/list', [GeneralController::class, 'getAttendanceList']);
     Route::get('/attendance/{id}', [GeneralController::class, 'getAttendanceDetail'])->name('attendance.detail');
-    // Route::post('/attendance/{id}', [GeneralController::class, 'postAttendanceDetail'])->name('attendance.detail');
     Route::get('/stamp_correction_request/list', [GeneralController::class, 'getRequestList']);
 });
