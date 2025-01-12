@@ -32,7 +32,7 @@ php artisan migrate
 ```
 
 ```
-php artisan db:seed
+php artisan db:seed --class=RolesAndPermissionsSeeder
 ```
 
 ## 開発環境
