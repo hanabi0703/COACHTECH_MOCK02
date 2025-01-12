@@ -4,7 +4,7 @@
 
 ## Dockerビルド
 ```
-https://github.com/hanabi0703/COACHTECH_MOCK02.git
+git clone --branch release/20250112 https://github.com/hanabi0703/COACHTECH_MOCK02.git
 ```
 
 docker-compose.ymlファイルの存在する階層へ移動し以下を実行
